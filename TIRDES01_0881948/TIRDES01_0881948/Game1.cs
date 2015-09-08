@@ -4,9 +4,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TIRDES01_0881948
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
@@ -18,65 +15,55 @@ namespace TIRDES01_0881948
             Content.RootDirectory = "Content";
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
+        Vector2 shipPosition;
+        Texture2D shipAppearance;
+        int shipSpeed = 10;
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            shipPosition = new Vector2(300.0f, 400.0f);
+            shipAppearance = Content.Load<Texture2D>("ship.png");
 
             base.Initialize();
+
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
-        }
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
-        }
-
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
 
-            // TODO: Add your update logic here
+            Vector2 shipMovement = new Vector2(0.0f, 0.0f);
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                shipMovement += new Vector2(-1.0f, 0.0f)*shipSpeed;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+            {
+                shipMovement += new Vector2(0.0f, -1.0f) * shipSpeed;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            {
+                shipMovement += new Vector2(1.0f, 0.0f) * shipSpeed;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                shipMovement += new Vector2(0.0f, 1.0f) * shipSpeed;
+            }
+            shipPosition += shipMovement;
+
 
             base.Update(gameTime);
         }
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
-
+            spriteBatch.Begin();
+            spriteBatch.Draw(shipAppearance, shipPosition, Color.White);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
