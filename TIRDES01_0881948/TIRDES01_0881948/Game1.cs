@@ -15,6 +15,8 @@ namespace TIRDES01_0881948
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1000;
+            graphics.PreferredBackBufferHeight = 1000;
             Content.RootDirectory = "Content";
         }
 
@@ -37,12 +39,13 @@ namespace TIRDES01_0881948
             shipAppearance = Content.Load<Texture2D>("ship.png");
             asteroidAppearance = Content.Load<Texture2D>("asteroid.png");
             plasmaAppearance = Content.Load<Texture2D>("plasmaSmall.png");
-            shipPosition = new Vector2(300.0f, 400.0f);
+            shipPosition = new Vector2(500.0f, 920.0f);
             shipSpeed = 100.0f;
         }
 
         protected override void Update(GameTime gameTime)
         {
+            shipSpeed = (float)(randomGenerator.NextDouble() * 300);
             KeyboardState ks = Keyboard.GetState();
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (ks.IsKeyDown(Keys.Escape)) {
@@ -55,10 +58,10 @@ namespace TIRDES01_0881948
                      from asteroidPosition in asteroidPositions
                      where Vector2.Distance(plasmaPosition, asteroidPosition) < 20.0f
                      select asteroidPosition
-                 where plasmaPosition.X > 50.0f &&
-                       plasmaPosition.X < 600.0f &&
-                       plasmaPosition.Y > 50.0f &&
-                       plasmaPosition.Y < 600.0f &&
+                 where plasmaPosition.X > 0.0f &&
+                       plasmaPosition.X < 1000.0f &&
+                       plasmaPosition.Y > 40.0f &&
+                       plasmaPosition.Y < 1000.0f &&
                        colliders.Count() == 0
                  select plasmaPosition - Vector2.UnitY * 200.0f * deltaTime).ToList();
             if (ks.IsKeyDown(Keys.Space))
@@ -71,11 +74,11 @@ namespace TIRDES01_0881948
                      where Vector2.Distance(plasmaPosition, asteroidPosition) < 20.0f
                      select asteroidPosition
                  where asteroidPosition.X > 50.0f &&
-                       asteroidPosition.X < 600.0f &&
+                       asteroidPosition.X < 950.0f &&
                        asteroidPosition.Y > 50.0f &&
-                       asteroidPosition.Y < 300.0f &&
+                       asteroidPosition.Y < 1000.0f &&
                        colliders.Count() == 0
-                 select asteroidPosition + Vector2.UnitY * 100.0f * deltaTime).ToList();
+                 select asteroidPosition + Vector2.UnitY * 75.0f * deltaTime).ToList();
 
             Vector2 shipMovement = new Vector2(0.0f, 0.0f);
             if (ks.IsKeyDown(Keys.A) || ks.IsKeyDown(Keys.Left)) {
@@ -109,7 +112,7 @@ namespace TIRDES01_0881948
                     }
                     break;
                 case 2:
-                    newAsteroidPositions.Add(new Vector2((float)(randomGenerator.NextDouble() * 500.0 + 51.0), 51.0f));
+                    newAsteroidPositions.Add(new Vector2((float)(randomGenerator.NextDouble() * 950.0 + 51.0), 51.0f));
                     gameLogicScriptPC = 3;
                     timeToWaitLine3 = (float)(randomGenerator.NextDouble() * 0.2 + 0.1);
                     break;
@@ -144,7 +147,7 @@ namespace TIRDES01_0881948
                     }
                     break;
                 case 6:
-                    newAsteroidPositions.Add(new Vector2((float)(randomGenerator.NextDouble() * 500.0 + 51.0), 51.0f));
+                    newAsteroidPositions.Add(new Vector2((float)(randomGenerator.NextDouble() * 950.0 + 51.0), 51.0f));
                     gameLogicScriptPC = 7;
                     timeToWaitLine7 = (float)(randomGenerator.NextDouble() * 1.5 + 0.5);
                     break;
