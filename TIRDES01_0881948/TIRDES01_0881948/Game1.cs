@@ -30,7 +30,7 @@ namespace TIRDES01_0881948
         List<Vector2> asteroidPositions = new List<Vector2>();
         List<Vector2> plasmaPositions = new List<Vector2>();
         Vector2 shipPosition;
-        float shipSpeed;
+        float shipSpeed, asteroidSpeed;
         protected override void LoadContent()
         {
 
@@ -46,6 +46,7 @@ namespace TIRDES01_0881948
         protected override void Update(GameTime gameTime)
         {
             shipSpeed = (float)(randomGenerator.NextDouble() * 300);
+            asteroidSpeed = (float)(randomGenerator.NextDouble() * 200);
             KeyboardState ks = Keyboard.GetState();
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (ks.IsKeyDown(Keys.Escape)) {
@@ -67,6 +68,10 @@ namespace TIRDES01_0881948
             if (ks.IsKeyDown(Keys.Space))
                 newPlasmaPositions.Add(shipPosition);
 
+
+
+
+
             var newAsteroidPositions =
                 (from asteroidPosition in asteroidPositions
                  let colliders =
@@ -78,7 +83,7 @@ namespace TIRDES01_0881948
                        asteroidPosition.Y > 50.0f &&
                        asteroidPosition.Y < 1000.0f &&
                        colliders.Count() == 0
-                 select asteroidPosition + Vector2.UnitY * 75.0f * deltaTime).ToList();
+                 select asteroidPosition + Vector2.UnitY * asteroidSpeed * deltaTime).ToList();
 
             Vector2 shipMovement = new Vector2(0.0f, 0.0f);
             if (ks.IsKeyDown(Keys.A) || ks.IsKeyDown(Keys.Left)) {
@@ -172,8 +177,9 @@ namespace TIRDES01_0881948
                     break;
                 default:
                     break;
-
             }
+
+            
 
             plasmaPositions = newPlasmaPositions;
             asteroidPositions = newAsteroidPositions;
